@@ -128,7 +128,7 @@ export function allocateSettlementProceeds(
     if (b.fractionNumerator !== a.fractionNumerator) {
       return b.fractionNumerator > a.fractionNumerator ? 1 : -1;
     }
-    return a.investmentId < b.investmentId ? -1 : a.investmentId > b.investmentId ? 1 : 0;
+    return a.investmentId.localeCompare(b.investmentId);
   });
 
   const shareSet = new Set<string>();
@@ -150,11 +150,7 @@ export function allocateSettlementProceeds(
   });
 
   // Sort by investmentId so the returned array is fully deterministic regardless of input order.
-  allocations.sort((left, right) => {
-    if (left.investmentId < right.investmentId) return -1;
-    if (left.investmentId > right.investmentId) return 1;
-    return 0;
-  });
+  allocations.sort((left, right) => left.investmentId.localeCompare(right.investmentId));
 
   return { allocations, unallocatedRemainderScaled: 0n };
 }
