@@ -51,7 +51,7 @@ describe("allocateSettlementProceeds (largest-remainder, #841)", () => {
         allocationOf("100.0000", "u-2", "inv-2"),
         allocationOf("100.0000", "u-3", "inv-3"),
       ],
-      scaled("100.00"),
+      scaled("100.0000"),
       scaled("300.0000")
     );
 
