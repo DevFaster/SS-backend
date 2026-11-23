@@ -79,7 +79,7 @@ export interface InvestorProRataAllocation {
  *   `0n` because every unit of `totalScaled` is assigned.
  */
 export function allocateSettlementProceeds(
-  investments: readonly Array<{
+  investments: ReadonlyArray<{
     readonly investmentId: string;
     readonly investorId: string;
     readonly investmentAmountScaled: bigint;
@@ -121,7 +121,7 @@ export function allocateSettlementProceeds(
   }
 
   // Leftover units to hand out (each investor receives at most +1).
-  let leftover = totalScaled - sumOfBases;
+  const leftover = totalScaled - sumOfBases;
 
   // Rank by fractional remainder descending, then investmentId ascending for determinism.
   const ranked = [...entries].sort((a, b) => {

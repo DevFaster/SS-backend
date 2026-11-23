@@ -1,5 +1,8 @@
 import { Account, Keypair } from "@stellar/stellar-sdk";
-import { BulkPayoutWizard } from "../../../../src/services/stellar/bulk-payout-wizard.service";
+import {
+  BulkPayoutWizard,
+  type AffiliatePayout,
+} from "../../../../src/services/stellar/bulk-payout-wizard.service";
 import { PaymentDistributorContractService } from "../../../../src/services/stellar/payment-distributor-contract.service";
 
 describe("BulkPayoutWizard (Enterprise Bulk Affiliate Payout Distribution)", () => {
@@ -36,8 +39,8 @@ describe("BulkPayoutWizard (Enterprise Bulk Affiliate Payout Distribution)", () 
     });
   }
 
-  function createAffiliatePayouts(count: number, baseAmount = 1000n): ReturnType<typeof createAffiliatePayouts> {
-    return Array.from({ length: count }, (_, i) => ({
+  function createAffiliatePayouts(count: number, baseAmount = 1000n): AffiliatePayout[] {
+    return Array.from({ length: count }, (_, i): AffiliatePayout => ({
       affiliateId: `affiliate-${i}`,
       address: Keypair.random().publicKey(),
       amountStroops: baseAmount * BigInt(i + 1),

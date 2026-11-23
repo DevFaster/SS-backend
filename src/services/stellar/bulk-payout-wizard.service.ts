@@ -53,6 +53,17 @@ export interface EscrowBalanceCheck {
   shortfall?: bigint;
 }
 
+function createNoopLogger(): AppLogger {
+  const noopLogger: AppLogger = {
+    info: () => {},
+    warn: () => {},
+    error: () => {},
+    debug: () => {},
+    child: () => noopLogger,
+  };
+  return noopLogger;
+}
+
 export class BulkPayoutWizard {
   private readonly distributor: PaymentDistributorContractService;
   private readonly feeRecipient: string;
@@ -71,12 +82,7 @@ export class BulkPayoutWizard {
     this.feeRecipient = config.feeRecipient;
     this.feeBps = config.feeBps;
     this.chunkSize = config.chunkSize ?? 50;
-    this.logger = config.logger ?? {
-      info: () => {},
-      warn: () => {},
-      error: () => {},
-      debug: () => {},
-    } as AppLogger;
+    this.logger = config.logger ?? createNoopLogger();
   }
 
   aggregatePayouts(payouts: AffiliatePayout[]): AggregatedPayout {
@@ -114,7 +120,7 @@ export class BulkPayoutWizard {
     };
   }
 
-  private async getEscrowBalance(invoiceId: string): Promise<bigint> {
+  private async getEscrowBalance(_invoiceId: string): Promise<bigint> {
     return 1_000_000_000_000n;
   }
 

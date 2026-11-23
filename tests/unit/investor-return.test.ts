@@ -4,25 +4,21 @@ import {
   type InvestorProRataAllocation,
 } from "../../src/lib/investor-return";
 
+function scaled(amount: string): bigint {
+  const [intPart, fracPart = ""] = amount.split(".");
+  const scaledFrac = (fracPart + "0000").slice(0, 4);
+  return BigInt(intPart) * 10000n + BigInt(scaledFrac);
+}
+
+function allocationOf(amount: string, investorId: string, investmentId: string) {
+  return {
+    investmentAmountScaled: scaled(amount),
+    investorId,
+    investmentId,
+  };
+}
+
 describe("allocateSettlementProceeds (largest-remainder, #841)", () => {
-  function scaled(amount: string): bigint {
-    const [intPart, fracPart = ""] = amount.split(".");
-    const scaledFrac = (fracPart + "0000").slice(0, 4);
-    return BigInt(intPart) * 10000n + BigInt(scaledFrac);
-  }
-
-  function allocationOf(
-    amount: string,
-    investorId: string,
-    investmentId: string
-  ) {
-    return {
-      investmentAmountScaled: scaled(amount),
-      investorId,
-      investmentId,
-    };
-  }
-
   it("allocates exactly the total with zero remainder when it divides evenly", () => {
     const { allocations, unallocatedRemainderScaled } = allocateSettlementProceeds(
       [
